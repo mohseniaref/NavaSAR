@@ -2,10 +2,12 @@ cff-version: 1.2.0
 message: "If you use NavaSAR in your research or educational work, please cite it as below."
 title: "NavaSAR: Physics-Based SAR and InSAR Modeling, Simulation, and Retrieval"
 authors:
-  - family-names: "Mohammad"
-    given-names: ""
+  - family-names: "Mohseni Aref"
+    given-names: "Mohammad"
+    orcid: "https://orcid.org/0000-0003-3735-178X"
 version: 0.1.0a1
 date-released: 2026-09-11
+doi: 10.5281/zenodo.22700039
 license: MIT
 repository-code: "https://github.com/mohseniaref/NavaSAR"
 keywords:

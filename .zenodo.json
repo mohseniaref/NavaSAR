@@ -3,8 +3,8 @@
   "description": "NavaSAR is an open-source scientific Python library for natural-material dielectric properties, polarimetric scattering, SAR simulation, InSAR coherence and closure phase, land backscatter, and soil-moisture retrieval.",
   "creators": [
     {
-      "name": "Mohammad",
-      "affiliation": ""
+      "name": "Mohseni Aref, Mohammad",
+      "orcid": "0000-0003-3735-178X"
     }
   ],
   "access_right": "open",

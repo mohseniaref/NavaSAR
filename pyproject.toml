@@ -8,7 +8,7 @@ version = "0.1.0a1"
 description = "Physics-based SAR and InSAR modeling, simulation, polarimetry, and retrieval"
 readme = "README.md"
 authors = [
-    { name = "Mohammad" }
+    { name = "Mohammad Mohseni Aref" }
 ]
 license = { text = "MIT" }
 keywords = [

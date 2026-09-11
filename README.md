@@ -7,6 +7,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Release: alpha](https://img.shields.io/badge/release-0.1.0a1-orange.svg)](https://github.com/mohseniaref/NavaSAR/releases)
 [![Tests](https://github.com/mohseniaref/NavaSAR/actions/workflows/tests.yml/badge.svg)](https://github.com/mohseniaref/NavaSAR/actions/workflows/tests.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22700038.svg)](https://doi.org/10.5281/zenodo.22700038)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Documentation](https://img.shields.io/badge/docs-reference-green.svg)](docs/index.md)
 
