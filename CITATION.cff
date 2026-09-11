@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use NavaSAR in your research or educational work, please cite it as below."
+title: "NavaSAR: Physics-Based SAR and InSAR Modeling, Simulation, and Retrieval"
+authors:
+  - family-names: "Mohammad"
+    given-names: ""
+version: 0.1.0a1
+date-released: 2026-09-11
+license: MIT
+repository-code: "https://github.com/mohseniaref/NavaSAR"
+keywords:
+  - "SAR Interferometry"
+  - "Soil Moisture"
+  - "Closure Phase"
+  - "Dielectric Mixing"
+  - "Microwave Remote Sensing"

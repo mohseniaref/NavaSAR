@@ -1,0 +1,22 @@
+{
+  "title": "NavaSAR: Physics-Based SAR and InSAR Modeling, Simulation, and Retrieval",
+  "description": "NavaSAR is an open-source scientific Python library for natural-material dielectric properties, polarimetric scattering, SAR simulation, InSAR coherence and closure phase, land backscatter, and soil-moisture retrieval.",
+  "creators": [
+    {
+      "name": "Mohammad",
+      "affiliation": ""
+    }
+  ],
+  "access_right": "open",
+  "license": "MIT",
+  "keywords": [
+    "SAR",
+    "InSAR",
+    "soil moisture",
+    "closure phase",
+    "dielectric constant",
+    "remote sensing",
+    "geophysics"
+  ],
+  "upload_type": "software"
+}

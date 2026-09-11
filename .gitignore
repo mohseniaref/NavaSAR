@@ -1,0 +1,32 @@
+# Papers (not distributed)
+*.pdf
+
+# Notebook outputs / checkpoints
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# Generated figures
+examples/*.png
+examples/*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environments
+.env
+*.log
+
+# Local editor / agent state
+.vscode/
+.amazonq/
+.agents/
+.codex/
+
+# OS files
+.DS_Store
+Thumbs.db
