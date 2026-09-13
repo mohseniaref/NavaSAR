@@ -27,7 +27,7 @@ NavaSAR/
 │   ├── 10_zheng_figs7_9_10_sensitivity.ipynb     # End-to-end pipeline (Fig. 7), depth D & multilook noise
 │   ├── 11_inversion_and_retrieval.ipynb          # Quantitative retrieval: Brent root-finding & InSAR-SMI
 │   ├── 12_land_backscatter_simulation.ipynb      # Canopy, row direction & multilook land imagery
-│   ├── 13_material_dielectric_models.ipynb       # Ellipsoid mixtures and dry snow
+│   ├── 13_material_dielectric_models.ipynb       # Ellipsoid mixtures, solid rock, dry/wet soil & dry snow
 │   └── 14_polarimetric_sar_and_speckle.ipynb     # Polarization synthesis and covariance
 ├── docs/                               # Comprehensive Documentation & Undergrad Primer
 │   ├── index.md                        # Documentation overview

@@ -43,5 +43,5 @@ Physics-based SAR interferometric soil moisture modeling, simulation, and retrie
 | `10_zheng_figs7_9_10_sensitivity.ipynb` | End-to-end pipeline (Fig. 7), depth $D$ & multilook noise $1/\sqrt{M}$ | Zheng & Fattahi (2026) Figs. 7, 9, 10 |
 | `11_inversion_and_retrieval.ipynb` | Quantitative moisture retrieval via coherence & InSAR-SMI | De Zan (2014) & Zheng (2026) |
 | `12_land_backscatter_simulation.ipynb` | Canopy attenuation, agricultural rows & N-look detected imagery | Ulaby, Moore & Fung (1986), Ch. 21 |
-| `13_material_dielectric_models.ipynb` | Ellipsoidal mixing, Polder–van Santen mixtures & dry snow | Long & Ulaby, Ch. 4 |
+| `13_material_dielectric_models.ipynb` | Ellipsoidal mixing, Polder–van Santen, generalized power-law mixing, solid rock, dry/wet (Dobson–Peplinski) soil & dry snow | Long & Ulaby, Ch. 4 |
 | `14_polarimetric_sar_and_speckle.ipynb` | Polarization synthesis, coherency and correlated speckle | Long & Ulaby, Ch. 5 |
