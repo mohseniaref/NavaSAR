@@ -9,6 +9,8 @@ Physics-based SAR interferometric soil moisture modeling, simulation, and retrie
 | Page | Description |
 |------|-------------|
 | [quickstart.md](quickstart.md) | Installation, environment setup, and programmatic workflow |
+| [citations.md](citations.md) | Scientific lineage, primary literature, and citation guidance |
+| [repository_structure.md](repository_structure.md) | Full directory tree and description of every module, notebook, and doc file |
 | [sar_foundations.md](sar_foundations.md) | Undergraduate introduction to material mixtures, polarimetry, radar statistics and conventions |
 | [theory.md](theory.md) | Comprehensive undergraduate primer, mathematical derivations & symbol glossary |
 | [api/dielectric.md](api/dielectric.md) | `navasar.dielectric` — Hallikainen (1985) permittivity & vertical wavenumber $k'_z$ |
