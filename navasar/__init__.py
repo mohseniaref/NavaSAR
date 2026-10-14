@@ -46,7 +46,7 @@ from .coherence import interferometric_coherence, phase_triplet, fresnel_phase
 from .slc import simulate_slc, multilook_interferogram
 
 # --- Closure phase ---
-from .closure import closure_phase_timeseries
+from .closure import closure_phase_timeseries, closure_phase_from_ifgrams
 
 # --- Behari (2005) models as a sub-namespace ---
 from . import behari
@@ -55,7 +55,16 @@ from . import behari
 from . import penetration
 
 # --- Moisture retrieval / inversion ---
-from . import inversion
+# Keep the core dielectric/SLC/closure modules importable on minimal compute
+# nodes where SciPy is not installed.  Functions in navasar.inversion still
+# require SciPy when that optional submodule is explicitly used.
+try:
+    from . import inversion
+    from .zheng_retrieval import retrieve_smi, event_response, normalize_smi
+except ImportError as exc:  # pragma: no cover - depends on node environment
+    if "scipy" not in str(exc).lower():
+        raise
+    inversion = None
 
 # --- Land backscatter, vegetation, periodic rows, and image statistics ---
 from . import land

@@ -14,7 +14,7 @@ NavaSAR/
 │   ├── land.py                         # Ulaby Ch. 21 land backscatter & detected-image statistics
 │   ├── materials.py                    # Long & Ulaby Ch. 4 material dielectric models
 │   └── polarimetry.py                  # Long & Ulaby Ch. 5 polarimetric radar tools
-├── notebooks/                          # 14 Curated Interactive Jupyter Notebooks
+├── notebooks/                          # 15 Curated Interactive Jupyter Notebooks
 │   ├── 01_complex_slc_simulation.ipynb           # Dielectric model & kz (De Zan Fig. 2)
 │   ├── 02_soil_moisture_effect.ipynb             # Coherence magnitude & phase grids (Fig. 3, 4)
 │   ├── 03_deformation_and_moisture.ipynb         # Fresnel transmission & phase triplets (Fig. 5, 8)
@@ -28,7 +28,8 @@ NavaSAR/
 │   ├── 11_inversion_and_retrieval.ipynb          # Quantitative retrieval: Brent root-finding & InSAR-SMI
 │   ├── 12_land_backscatter_simulation.ipynb      # Canopy, row direction & multilook land imagery
 │   ├── 13_material_dielectric_models.ipynb       # Ellipsoid mixtures, solid rock, dry/wet soil & dry snow
-│   └── 14_polarimetric_sar_and_speckle.ipynb     # Polarization synthesis and covariance
+│   ├── 14_polarimetric_sar_and_speckle.ipynb     # Polarization synthesis and covariance
+│   └── 15_soil_moisture_retrieval_comparison.ipynb # Corrected retrieval APIs, controls and real-point inspection
 ├── docs/                               # Comprehensive Documentation & Undergrad Primer
 │   ├── index.md                        # Documentation overview
 │   ├── citations.md                    # Scientific lineage, primary literature & citation guidance

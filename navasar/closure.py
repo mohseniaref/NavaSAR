@@ -17,29 +17,62 @@ def _bw1_timeseries(ifg_matrix):
     return ts
 
 
-def _fullnet_timeseries(ifg_matrix):
+def _fullnet_timeseries(ifg_matrix, branch='principal'):
     """
     Full-network time-series via least-squares inversion.
-    Solves: A * phi = dphi  (phase differences -> cumulative phases)
+    A solves interval increments, which must be cumulatively summed.
+
+    ``principal`` retains the original wrapped-angle convention and is suitable
+    only when pair phases share consistent branches. ``bw1`` lifts pair angles
+    to the nearest BW1-predicted branch; this is a diagnostic assumption, not
+    spatial phase unwrapping. Both return radians referenced to acquisition 0.
     """
     T = ifg_matrix.shape[0]
     n_ifg = T * (T - 1) // 2
     A = np.zeros((n_ifg, T - 1))
     dphi = np.zeros(n_ifg)
+    if branch not in ('principal', 'bw1'):
+        raise ValueError('branch must be principal or bw1')
+    bw1 = _bw1_timeseries(ifg_matrix)
     row = 0
     for i in range(T):
         for j in range(i + 1, T):
             dphi[row] = np.angle(ifg_matrix[i, j])
+            if branch == 'bw1':
+                dphi[row] += 2*np.pi*np.rint(
+                    (bw1[j]-bw1[i]-dphi[row])/(2*np.pi))
             for k in range(i, j):
                 A[row, k] = 1
             row += 1
     phi, _, _, _ = np.linalg.lstsq(A, dphi, rcond=None)
-    return np.concatenate([[0], phi])
+    return np.concatenate([[0], np.cumsum(phi)])
+
+
+def closure_phase_from_ifgrams(ifg_matrix, branch='principal'):
+    """BW1 minus all-pairs network series, all outputs in DEGREES.
+
+    Input must be a complete Hermitian complex pair-product matrix, not an
+    array of unwrapped phases. No zero-filled missing pairs are accepted.
+    The phase sign is that of I_ij = mean(z_i * conj(z_j)).
+    """
+    matrix = np.asarray(ifg_matrix)
+    if matrix.ndim != 2 or matrix.shape[0] != matrix.shape[1] or len(matrix) < 3:
+        raise ValueError('Expected square complex matrix with at least 3 dates')
+    if not np.iscomplexobj(matrix) or not np.all(np.isfinite(matrix)):
+        raise ValueError('Expected finite complex pair products')
+    offdiag = ~np.eye(len(matrix), dtype=bool)
+    if np.any(np.abs(matrix[offdiag]) == 0):
+        raise ValueError('Missing or zero pair products: not a complete network')
+    if not np.allclose(matrix, matrix.conj().T):
+        raise ValueError('Pair-product matrix must be Hermitian')
+    bw1 = _bw1_timeseries(matrix)
+    full = _fullnet_timeseries(matrix, branch=branch)
+    return tuple(np.rad2deg(v) for v in (bw1-full, bw1, full))
 
 
 def closure_phase_timeseries(mv_series, freq_ghz=1.4, sand=0.51, clay=0.13,
                               n_pixels=400, n_layers=200, max_depth=0.30,
-                              rng=None):
+                              rng=None, branch='principal'):
     """
     Compute closure phase time-series from a soil moisture time-series.
 
@@ -79,8 +112,4 @@ def closure_phase_timeseries(mv_series, freq_ghz=1.4, sand=0.51, clay=0.13,
             ifg_matrix[i, j] = multilook_interferogram(slc_stack[i], slc_stack[j])
             ifg_matrix[j, i] = np.conj(ifg_matrix[i, j])
 
-    bw1 = _bw1_timeseries(ifg_matrix)
-    full = _fullnet_timeseries(ifg_matrix)
-
-    closure_ts = np.rad2deg(bw1 - full)
-    return closure_ts, np.rad2deg(bw1), np.rad2deg(full)
+    return closure_phase_from_ifgrams(ifg_matrix, branch=branch)

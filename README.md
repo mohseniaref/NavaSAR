@@ -21,6 +21,25 @@
 
 For the foundational references, citation guidance, and a research-oriented overview of the scientific lineage behind NavaSAR, see [docs/citations.md](docs/citations.md).
 
+For the corrected event/gradient SMI APIs, experimental Hallikainen/Dobson/Wang–Schmugge
+closure inversion, assumptions, attribution and examples, see
+[Soil-moisture retrieval guide](docs/soil_moisture_retrieval.md).
+The executable [Notebook 15](notebooks/15_soil_moisture_retrieval_comparison.ipynb)
+demonstrates these APIs with synthetic controls and optional read-only inspection
+of saved real east–west point results.
+
+[Notebook 16](notebooks/16_real_moisture_rainfall_maps.ipynb) displays separate
+direct-inversion and relative-SMI figures, rainfall overlays and geographic
+point snapshots. Its saved figures can be viewed on GitHub; rerunning it needs
+the local Mina project results, which are not distributed in this repository.
+Links to the sibling `MiaplPy` project in research notes are local-workspace
+references, not files included with a standalone NavaSAR checkout.
+
+**Numerical compatibility:** the October 2026 Hallikainen texture/table and
+full-network cumulative-sum corrections change historical simulations. Rerun
+old notebooks before interpreting their results. Notebook 15's retained
+outputs predate the dielectric correction and are explicitly marked historical.
+
 ---
 
 ## 🔬 Core Physics at a Glance
@@ -34,7 +53,10 @@ For the foundational references, citation guidance, and a research-oriented over
 4. **Non-Zero Closure Phase ($\phi_{123} \ne 0$):**  
    Unlike linear ground displacement and atmospheric delays that cancel across closed interferometric loops, non-linear dielectric shifts create persistent non-closure signatures that serve as a direct diagnostic tracer for soil moisture.
 5. **Soil Moisture Retrieval (InSAR-SMI):**  
-   Moisture anomalies are retrieved quantitatively via 1D coherence root-finding and the temporal gradient of InSAR closure phase time-series ($\text{SMI}(t) = \nabla_t \phi_{\text{closure}}(t) / T_{\text{coeff}}$).
+   Zheng–Fattahi exponential-event inversion and the normalized-gradient proxy
+   return relative indices, not automatically calibrated volumetric moisture.
+   A separate experimental dielectric-model inverse problem returns conditional
+   moisture estimates requiring an explicit reference and physical assumptions.
 
 ---
 

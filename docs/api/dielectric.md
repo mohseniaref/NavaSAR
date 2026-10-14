@@ -25,8 +25,8 @@ The dielectric constant ε is a **complex number**:
 ```
 
 Both parts increase as the soil gets wetter. At L-band (1.4 GHz):
-- Dry sandy loam: ε ≈ 2.9 + 0.4j
-- Wet sandy loam (mv=0.3): ε ≈ 15 + 3j
+- Dry soil (51% sand, 13% clay): ε ≈ 2.26 + 0.10j
+- Wet soil with the same texture (mv=0.3): ε ≈ 18.30 + 2.82j
 
 ---
 
@@ -60,7 +60,8 @@ A₁ = a₁₀ + a₁₁·S + a₁₂·C
 A₂ = a₂₀ + a₂₁·S + a₂₂·C
 ```
 
-and S = sand fraction, C = clay fraction (both in range 0–1).
+and S = sand percentage, C = clay percentage (by weight, 0–100).
+The API accepts fractions and multiplies by 100 internally.
 
 ### Full coefficient tables
 
@@ -80,7 +81,7 @@ and S = sand fraction, C = clay fraction (both in range 0–1).
 | B₁ (× mv) | 5.507 | +0.044 | −0.002 |
 | B₂ (× mv²) | 17.753 | −0.313 | +0.206 |
 
-**Real part ε' at C-band (5.0 GHz):**
+**Real part ε' at 4.0 GHz (previously mislabeled 5.0):**
 
 | Coefficient | Constant term | × Sand (S) | × Clay (C) |
 |-------------|--------------|------------|------------|
@@ -88,51 +89,51 @@ and S = sand fraction, C = clay fraction (both in range 0–1).
 | A₁ | 5.505 | +0.371 | +0.062 |
 | A₂ | 114.826 | −0.389 | −0.547 |
 
-**Imaginary part ε'' at C-band (5.0 GHz):**
+**Imaginary part ε'' at 4.0 GHz:**
 
 | Coefficient | Constant term | × Sand (S) | × Clay (C) |
 |-------------|--------------|------------|------------|
 | B₀ | 0.004 | +0.001 | +0.002 |
 | B₁ | 0.951 | +0.005 | −0.010 |
-| B₂ | 15.354 | +0.143 | −0.261 |
+| B₂ | 16.759 | +0.192 | +0.290 |
 
-For frequencies other than 1.4 or 5.0 GHz, the code linearly interpolates
-between the two tables.
+The implementation includes 1.4, 4, 6, 8, 10, 12, 14, 16 and 18 GHz rows.
+Other frequencies within this range interpolate adjacent rows (5.405 uses 4/6).
+No extrapolation. Tables checked against [MIMICS E.1](https://web.eecs.umich.edu/~lep/mimics.pdf).
+This correction changes historical simulations; previous figures need rerunning.
 
 ### Worked example by hand
 
-Sandy loam: S = 0.51, C = 0.13, mv = 0.25, freq = 1.4 GHz.
+API sand=0.51, clay=0.13 means polynomial S=51, C=13; mv=0.25, freq=1.4 GHz.
 
 Step 1 — compute A₀, A₁, A₂:
 ```
-A₀ = 2.862 + (−0.012)×0.51 + 0.001×0.13 = 2.862 − 0.006 + 0.000 = 2.856
-A₁ = 3.803 + 0.462×0.51 + (−0.341)×0.13 = 3.803 + 0.236 − 0.044 = 3.995
-A₂ = 119.006 + (−0.500)×0.51 + 0.633×0.13 = 119.006 − 0.255 + 0.082 = 118.833
+A₀ = 2.862 − 0.012×51 + 0.001×13 = 2.263
+A₁ = 3.803 + 0.462×51 − 0.341×13 = 22.932
+A₂ = 119.006 − 0.500×51 + 0.633×13 = 101.735
 ```
 
 Step 2 — evaluate polynomial at mv = 0.25:
 ```
-ε' = 2.856 + 3.995×0.25 + 118.833×0.0625
-   = 2.856 + 0.999 + 7.427
-   = 11.28
+ε' = 2.263 + 22.932×0.25 + 101.735×0.0625 = 14.35444
 ```
 
 Step 3 — same for imaginary part:
 ```
-B₀ = 0.356 − 0.003×0.51 − 0.008×0.13 = 0.354
-B₁ = 5.507 + 0.044×0.51 − 0.002×0.13 = 5.529
-B₂ = 17.753 − 0.313×0.51 + 0.206×0.13 = 17.620
-ε'' = 0.354 + 5.529×0.25 + 17.620×0.0625 = 0.354 + 1.382 + 1.101 = 2.837
+B₀ = 0.356 − 0.003×51 − 0.008×13 = 0.099
+B₁ = 5.507 + 0.044×51 − 0.002×13 = 7.725
+B₂ = 17.753 − 0.313×51 + 0.206×13 = 4.468
+ε'' = 0.099 + 7.725×0.25 + 4.468×0.0625 = 2.3095
 ```
 
-Result: ε ≈ 11.28 + 2.84j  ✓ (matches the code output)
+Result: ε ≈ 14.35 + 2.31j.
 
 ### Parameters
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `mv` | array_like | — | Volumetric soil moisture. Range: 0 (bone dry) to 0.5 (saturated). Units: m³ water / m³ soil. |
-| `freq_ghz` | float | `1.4` | Radar frequency in GHz. L-band = 1.4, C-band = 5.0. Other values are linearly interpolated. |
+| `freq_ghz` | float | `1.4` | Radar frequency in GHz, 1.4–18. Adjacent-table interpolation. |
 | `sand` | float | `0.51` | Sand fraction as a decimal (not percent). Default is the AGRISAR 2006 field 222 value. |
 | `clay` | float | `0.13` | Clay fraction as a decimal. Note: sand + silt + clay = 1. |
 
@@ -140,22 +141,22 @@ Result: ε ≈ 11.28 + 2.84j  ✓ (matches the code output)
 
 | Name | Type | Description |
 |------|------|-------------|
-| `eps` | complex ndarray | ε = ε' + jε''. Real part controls phase velocity; imaginary part controls absorption. Both are positive. |
+| `eps` | complex ndarray | ε = ε' + jε''. Empirical fits can become nonphysical at extreme inputs; the inversion rejects non-attenuating results. |
 
 ### Physical interpretation of the output
 
 ```python
 eps = hallikainen_dielectric(0.25, freq_ghz=1.4)
-# eps ≈ 11.28 + 2.84j
+# eps ≈ 14.35 + 2.31j
 
 # Phase velocity in soil (fraction of speed of light):
-v_phase = 1.0 / np.sqrt(eps.real)   # ≈ 0.30 → 30% of c
+v_phase = 1.0 / np.sqrt(eps.real)   # ≈ 0.264 (low-loss approximation)
 
 # Wavelength in soil (shorter than in air):
-lam_soil = 0.3 / (1.4 * np.sqrt(eps.real))   # ≈ 6.4 cm vs 21.4 cm in air
+lam_soil = 0.3 / (1.4 * np.sqrt(eps.real))   # ≈ 5.7 cm vs 21.4 cm in air
 
 # Loss tangent (ratio of absorption to storage):
-tan_delta = eps.imag / eps.real   # ≈ 0.25 → significant loss
+tan_delta = eps.imag / eps.real   # ≈ 0.161
 ```
 
 ### Example

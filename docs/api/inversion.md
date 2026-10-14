@@ -2,30 +2,44 @@
 
 Routines for inverting volumetric soil moisture from interferometric coherence and closure phase observables.
 
+**Current retrieval guide:** [methods, actual APIs, attribution and limitations](../soil_moisture_retrieval.md).
+Use `navasar.zheng_retrieval.retrieve_smi` for paper-equation event SMI and the
+normalized-gradient proxy; `loss="soft_l1"` selects the robust extension.
+Use `navasar.dielectric_inversion.invert_closure_moisture` for the separate
+experimental material-model inverse problem. The legacy routines below are not
+the current event/normalized-gradient SMI API. Signatures list key arguments;
+consult Python help for additional simulation parameters.
+
 ---
 
 ## Coherence Inversion (De Zan 2014, Sec. III-D)
 
-### `calibration_coherence_curve(mv_master, freq_ghz=1.4, n_points=200, sand=0.51, clay=0.13)`
+### `calibration_coherence_curve(mv_ref, freq_ghz=1.4, theta_inc_deg=45.0, sand=0.51, clay=0.13, n_points=100)`
 Precomputes lookup tables of $|\gamma|(m_{v2})$ and $\angle\gamma(m_{v2})$ for a given reference master moisture.
 
-### `invert_moisture_from_coherence(obs_value, mv_master, freq_ghz=1.4, target='magnitude', sand=0.51, clay=0.13)`
+### `invert_moisture_from_coherence(gamma_obs, mv_ref, freq_ghz=1.4, theta_inc_deg=45.0, sand=0.51, clay=0.13, observable='magnitude')`
 Inverts slave soil moisture $m_{v2}$ via 1D Brent root-finding against the forward model.
 
 ---
 
-## Closure Phase InSAR-SMI (Zheng & Fattahi 2026, Sec. 4)
+## Historical transfer experiments — not the paper's main event inversion
 
-### `calibrate_closure_transfer(mv_base=0.05, anomaly_range=(0.02, 0.25), n_points=8, freq_ghz=1.4, **sim_kw)`
-Calibrates the linear transfer coefficient $T_{\text{coeff}}$ [deg / ($m^3/m^3$)] relating closure phase steps to moisture anomalies:
+The rectangular calibration below may have zero closure and now raises rather
+than manufacturing a transfer. It must not be used as absolute calibration.
+
+### `calibrate_closure_transfer(mv_base, freq_ghz=1.4, ..., anomaly_amps=None, tau_acq=4, rng=None)`
+Historical rectangular-event experiment attempting to fit a transfer coefficient
+$T_{\text{coeff}}$ [deg / ($m^3/m^3$)] relating closure phase steps to anomalies:
 $$\beta \approx T_{\text{coeff}} \times \alpha$$
 
-### `insar_smi_timeseries(closure_phase_ts, transfer_coeff)`
-Computes the InSAR Soil Moisture Index (SMI) time series from the temporal gradient of the closure phase:
+### `insar_smi_timeseries(cp_ts_deg, T_coeff, smooth_window=3)`
+Legacy acquisition-index gradient divided by a supplied transfer; this is not
+the normalized-gradient proxy API and does not itself provide calibration:
 $$\text{SMI}(t) = \frac{\nabla_t \phi_{\text{closure}}(t)}{T_{\text{coeff}}}$$
 
-### `invert_moisture_from_triplet(triplet_deg, mv1, mv3, freq_ghz=1.4, sand=0.51, clay=0.13)`
-Retrieves intermediate acquisition moisture $m_{v2}$ from a single phase triplet $\phi_{123}$.
+### `invert_moisture_from_triplet(triplet_step_deg, mv_base, freq_ghz=1.4, ...)`
+Legacy step/transfer division using `calibrate_closure_transfer`; not a
+three-date nonlinear dielectric inversion. Zero transfer now raises an error.
 
-### `joint_inversion(obs_coherence, obs_phase_deg, mv_master, freq_ghz=1.4, weight_mag=1.0, weight_phase=0.1, sand=0.51, clay=0.13)`
+### `joint_inversion(gamma_mag_obs, triplet_obs_deg, mv_ref, freq_ghz=1.4, theta_inc_deg=45.0, sand=0.51, clay=0.13, weights=(1.0, 1.0))`
 Retrieves slave moisture by minimizing a combined weighted magnitude and phase loss function.

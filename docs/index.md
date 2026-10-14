@@ -9,6 +9,7 @@ Physics-based SAR interferometric soil moisture modeling, simulation, and retrie
 | Page | Description |
 |------|-------------|
 | [quickstart.md](quickstart.md) | Installation, environment setup, and programmatic workflow |
+| [soil_moisture_retrieval.md](soil_moisture_retrieval.md) | Event SMI, gradient proxy, robust fitting, dielectric inversion, attribution and limitations |
 | [citations.md](citations.md) | Scientific lineage, primary literature, and citation guidance |
 | [repository_structure.md](repository_structure.md) | Full directory tree and description of every module, notebook, and doc file |
 | [sar_foundations.md](sar_foundations.md) | Undergraduate introduction to material mixtures, polarimetry, radar statistics and conventions |
@@ -31,6 +32,8 @@ Physics-based SAR interferometric soil moisture modeling, simulation, and retrie
 
 | Notebook | Focus | Primary Literature Reference |
 | :--- | :--- | :--- |
+| `15_soil_moisture_retrieval_comparison.ipynb` | Executable event/gradient/robust SMI comparison, experimental dielectric inversion and read-only real-point inspection | Zheng–Fattahi Eqs. 10–11 and §6.1; clearly labelled extensions |
+| `16_real_moisture_rainfall_maps.ipynb` | Separate direct-model and SMI time series, rainfall overlays, viridis geographic snapshots | Six saved points only; rainfall is not an inversion input |
 | `01_complex_slc_simulation.ipynb` | Complex dielectric constant & vertical wavevector | De Zan et al. (2014) Fig. 2 |
 | `02_soil_moisture_effect.ipynb` | Coherence magnitude & phase grids | De Zan et al. (2014) Figs. 3, 4 |
 | `03_deformation_and_moisture.ipynb` | Boundary Fresnel transmission & non-zero phase triplets | De Zan et al. (2014) Figs. 5, 8 |

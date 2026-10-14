@@ -136,7 +136,10 @@ def calibrate_closure_transfer(mv_base, freq_ghz=1.4, sand=0.51, clay=0.13,
     """
     Build a calibration curve: moisture anomaly α → closure phase step β.
 
-    Zheng & Fattahi (2026) Eq. (8):  β ≈ T_coeff × α
+    Historical rectangular-pulse sensitivity experiment, NOT an implementation
+    of Zheng & Fattahi (2026) Eqs. (8)--(11). Use navasar.zheng_retrieval for
+    exponential-event fitting and the normalized-gradient proxy. A deterministic
+    two-state rectangular pulse can give zero closure and no transfer.
 
     The transfer coefficient T_coeff [deg / (m³/m³)] depends on:
     frequency, soil texture, baseline moisture, and simulation parameters.
@@ -185,8 +188,12 @@ def calibrate_closure_transfer(mv_base, freq_ghz=1.4, sand=0.51, clay=0.13,
         cp_steps.append(np.max(cp) - np.min(cp))
 
     cp_steps = np.array(cp_steps)
-    # Linear fit through origin: β = T_coeff * α
+    # Historical free-intercept fit (not a fit constrained through the origin).
     T_coeff = float(np.polyfit(anomaly_amps, cp_steps, 1)[0])
+    if not np.isfinite(T_coeff) or abs(T_coeff) < 1e-8:
+        raise ValueError('Rectangular-pulse experiment has no resolved transfer. '
+                         'Use navasar.zheng_retrieval for relative event/gradient SMI; '
+                         'do not replace zero sensitivity with an arbitrary floor.')
     return anomaly_amps, cp_steps, T_coeff
 
 
@@ -252,6 +259,8 @@ def insar_smi_timeseries(cp_ts_deg, T_coeff, smooth_window=3):
     system's background; absolute moisture requires external calibration.
     """
     cp = np.asarray(cp_ts_deg, dtype=float)
+    if not np.isfinite(T_coeff) or abs(T_coeff) < 1e-8:
+        raise ValueError('A finite, nonzero independently justified transfer is required')
     # Smooth before differentiating to reduce noise
     w = smooth_window
     kernel = np.ones(w) / w

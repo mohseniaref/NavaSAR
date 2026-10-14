@@ -8,6 +8,7 @@ notebooks/.ipynb_checkpoints/
 # Generated figures
 examples/*.png
 examples/*.pdf
+examples/15_soil_moisture_retrieval/
 
 # Python
 __pycache__/
